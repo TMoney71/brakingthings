@@ -3,18 +3,15 @@ package com.example.brakingthings
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment
-import com.esri.arcgisruntime.data.ServiceFeatureTable
 import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReferences
-import com.esri.arcgisruntime.layers.FeatureLayer
+
 import com.esri.arcgisruntime.mapping.ArcGISMap
 import com.esri.arcgisruntime.mapping.BasemapStyle
 import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.Graphic
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay
 import com.esri.arcgisruntime.mapping.view.MapView
-import com.esri.arcgisruntime.portal.Portal
-import com.esri.arcgisruntime.portal.PortalItem
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 
@@ -28,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mapView: MapView by lazy {activityMainBinding.mapView}
 
-    val pointList = mutableListOf<Point>()
+    private val pointList = mutableListOf<Point>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,11 +69,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private  fun addGraphics(){
+    private  fun addGraphics() {
         val graphicsOverlay = GraphicsOverlay()
         mapView.graphicsOverlays.add(graphicsOverlay)
 
-        pointList.add(Point(111.78220388310245,  43.81849614954874, SpatialReferences.getWgs84()))
+        pointList.add(Point(111.78220388310245, 43.81849614954874, SpatialReferences.getWgs84()))
+        pointList.add(Point(48.9201, 122.3427, SpatialReferences.getWgs84()))
         pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
 //        pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
 //        pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
@@ -89,8 +87,6 @@ class MainActivity : AppCompatActivity() {
 //        pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
 //        pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
 //        pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
-//        pointList.add(Point(-118.8065, 34.0005, SpatialReferences.getWgs84()))
-
 
 
         // create an opaque orange (0xFFFF5733) point symbol with a blue (0xFF0063FF) outline symbol
@@ -99,17 +95,12 @@ class MainActivity : AppCompatActivity() {
         val blueOutlineSymbol = SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, -0xff9c01, 2f)
         simpleMarkerSymbol.outline = blueOutlineSymbol
 
-        val pointGraphicList = pointList.forEach { point ->
-            Graphic(point, simpleMarkerSymbol)
+        pointList.forEach { point ->
+            val graphic = Graphic(point, simpleMarkerSymbol)
+            graphicsOverlay.graphics.add(graphic)
         }
 
-
-        pointGraphicList.forEach { pointGraphic ->
-            graphicsOverlay.graphics.add(pointGraphic)
-        }
     }
-
-
 
 }
 
